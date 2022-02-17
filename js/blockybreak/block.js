@@ -3,9 +3,10 @@ class Block {
   constructor(x, y, blocktype) {
     this.x = x;
     this.y = y;
+    this.blocktype = blocktype;
   }
   render() {
-    fill(0, 255, 0);
-    rect(this.x, this.y, BLOCKSIZE, BLOCKSIZE);
+    fill(255, 0, 0);
+    rect(this.x * BLOCKSIZE, this.y * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
   }
 }

@@ -8,6 +8,8 @@ class GameHandler {
 
   gameLoop() {
     this.gameKeys();
+    this.player.update();
+    this.checkPlayerBlockCollisions();
     this.renderWorld();
   }
 
@@ -23,6 +25,27 @@ class GameHandler {
     }
     if (this.controller.downKeyDwn) {
       this.player.movePlayer(0, 1);
+    }
+  }
+
+  checkPlayerBlockCollisions() {
+    for (let b of blocks) {
+      if (
+        Utils2d.checkBoundCollision(
+          this.player.x,
+          this.player.y,
+          BLOCKSIZE,
+          BLOCKSIZE,
+          b.x,
+          b.y,
+          BLOCKSIZE,
+          BLOCKSIZE
+        )
+      ) {
+        this.player.y = 0; // b.y - BLOCKSIZE * 3;
+        this.player.yvel = 0;
+        break;
+      }
     }
   }
 

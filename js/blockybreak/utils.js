@@ -1,25 +1,45 @@
-/*
+/* eslint-disable no-undef, no-unused-vars, no-constants */
 class Utils2d {
   static windowToWorldCoord(x, y) {
-    let b = [];
-    b[0] = floor((x - WORLD_ORIGINX * BLOCKSCALE) / BLOCKSIZE);
-    b[1] = floor((y - WORLD_ORIGINY * BLOCKSCALE) / BLOCKSIZE);
-
-    return b;
+    // let b = [];
+    // b[0] = floor((x - WORLD_ORIGINX * BLOCKSCALE) / BLOCKSIZE);
+    // b[1] = floor((y - WORLD_ORIGINY * BLOCKSCALE) / BLOCKSIZE);
+    // return b;
   }
 
   static cameraPaneToWorldCoord(x, y) {
-    let b = [];
-    b[0] = floor(
-      (x - WORLD_ORIGINX - player.cam.pos.x * BLOCKSCALE) / BLOCKSIZE
-    );
-    b[1] = floor(
-      (y - WORLD_ORIGINY - player.cam.pos.y * BLOCKSCALE) / BLOCKSIZE
-    );
-
-    return b;
+    //let b = [];
+    //b[0] = floor(
+    //  (x - WORLD_ORIGINX - player.cam.pos.x * BLOCKSCALE) / BLOCKSIZE
+    //);
+    //b[1] = floor(
+    //  (y - WORLD_ORIGINY - player.cam.pos.y * BLOCKSCALE) / BLOCKSIZE
+    //);
+    //return b;
   }
 
+  static checkBoundCollision(
+    rect1x,
+    rect1y,
+    rect1w,
+    rect1h,
+    rect2x,
+    rect2y,
+    rect2w,
+    rect2h
+  ) {
+    if (
+      rect1x < rect2x + rect2w &&
+      rect1x + rect1w > rect2x &&
+      rect1y < rect2y + rect2h &&
+      rect1h + rect1y > rect2y
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  /*
   static assertTest(values = [], expectedValues = []) {
     let actualValues = [];
     for (let v = 0; v < values.length; v++) {
@@ -52,5 +72,7 @@ function createNewBlock(mx, my, t = 1) {
       break;
     }
   }
+
 }
 */
+}
