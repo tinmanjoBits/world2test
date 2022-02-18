@@ -1,14 +1,18 @@
-/* eslint-disable no-undef, no-unused-vars */
+/* eslint-disable no-undef, no-unused-vars, no-constants */
 
 var t1, t2;
 
+var BLOCKSCALE = 1;
+var BLOCKSIZE = BLOCKSCALE * 32;
+
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(800, 600);
+  BLOCKSIZE = BLOCKSCALE * (width / 32);
   controller = new Controller();
   blocks = [];
   player = new Player(BLOCKSIZE * 6, height / 2);
   gameHandler = new GameHandler(controller, player);
-  generateTerrain(0, 24);
+  generateTerrain(0, 21);
 
   // test collion with colliders
   //t1 = new TestBlock(16, 16 * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE * 2);
@@ -17,7 +21,7 @@ function setup() {
 
 function keyPressed() {
   if (keyCode === 67) {
-    player.jumping = true;
+    controller.jumpKey = true;
     console.log("jump");
   }
 }
@@ -30,9 +34,10 @@ function draw() {
   //t1.render();
   //t2.render();
   if (mouseIsPressed === true) {
-    player.x = mouseX;
-    player.y = mouseY;
+    player.pos.x = mouseX;
+    player.pos.y = mouseY;
     player.landed = false;
+    player.falling = true;
     player.collided = false;
   }
 }
@@ -42,11 +47,6 @@ function generateTerrain(x, y) {
     blocks.push(new Block(i + x, y));
   }
 }
-
-// This Redraws the Canvas when resized
-windowResized = function () {
-  resizeCanvas(windowWidth, windowHeight);
-};
 
 class TestBlock {
   constructor(x, y, w = BLOCKSIZE, h = BLOCKSIZE) {
@@ -67,3 +67,8 @@ class TestBlock {
     rect(this.x, this.y, this.w, this.h);
   }
 }
+
+// This Redraws the Canvas when resized
+windowResized = function () {
+  resizeCanvas(windowWidth, windowHeight);
+};

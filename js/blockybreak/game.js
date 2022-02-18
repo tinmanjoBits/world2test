@@ -23,10 +23,13 @@ class GameHandler {
       this.player.movePlayer(1, 0);
     }
     if (this.controller.upKeyDwn) {
-      this.player.movePlayer(0, -1);
+      //   this.player.movePlayer(0, -1);
     }
     if (this.controller.downKeyDwn) {
-      this.player.movePlayer(0, 1);
+      //   this.player.movePlayer(0, 1);
+    }
+    if (this.controller.jumpKey) {
+      this.player.movePlayer(0, -1);
     }
   }
 
@@ -37,9 +40,13 @@ class GameHandler {
       // only check blocks under the player
       this.player.collided = player.testBlockCollision(b, "top");
       if (this.player.collided) {
-        this.player.y = b.y * BLOCKSIZE - BLOCKSIZE * 2 - 1;
+        this.player.pos.y = b.pos.y * BLOCKSIZE - BLOCKSIZE * 2 - 1;
         this.player.collided = false;
         this.player.landed = true;
+
+        // prevent falling through floor of block
+        //this.player.falling = false;
+        this.player.vel.y = 0;
         break;
       }
     }

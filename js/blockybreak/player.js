@@ -2,72 +2,86 @@
 
 class Player {
   constructor(x, y) {
+    this.acc = createVector(0, 0);
     this.vel = createVector(0, 0);
-    this.x = x;
-    this.y = y;
-    this.playerSpeed = 3;
+    this.pos = createVector(x, y);
+
+    this.playerSpeed = 2.2;
     this.landed = false;
-    this.falling = false;
+    this.falling = true;
     this.collided = false;
     this.jumping = false;
+    this.outOfBounds = false;
   }
 
   update() {
-    //console.log(player.collided);
+    if (this.falling && !this.landed) {
+      this.acc.add(0, GRAV);
+      this.acc.setMag(0.6);
+    }
 
-    if (!this.landed && !this.collided && !this.jumping) {
-      this.vel.add(createVector(0, GRAV));
-      this.y += this.vel.y;
-      this.falling = true;
-    } else {
-      this.vel.set(this.vel.x, 0);
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
 
-      if (this.jumping) {
-        this.vel.add(createVector(this.vel.x, -GRAV * 16));
-        this.y += this.vel.y;
-        this.jumping = false;
+    if (this.landed) {
+      this.vel.y = 0;
+      this.acc.y = 0;
+      this.vel.mult(0.8, 0);
+      if (abs(this.vel.x) < 0.01) {
+        this.vel.x = 0;
+        this.acc.x = 0;
       }
     }
 
-    if (this.landed) {
-      this.x += this.vel.x;
-      this.vel.mult(createVector(0.8, 0));
+    if (this.jumping) {
+      this.acc.mult(0.9);
+      if (this.vel.y < 0.01) {
+        this.vel.y = 0;
+        this.jumping = false;
+      }
     }
-
+    // checkk player has fallen out of bounds to the height of the window
     this.checkPlayerBottomCollision();
 
-    if (this.vel.y > GRAV * 2) {
-      this.vel.y = GRAV * 2;
-    }
+    // prevent acc limits due to euler integration
+    this.acc.set(0, 0);
   }
 
   movePlayer(xdir, ydir) {
     if (xdir === -1) {
-      this.vel.add(createVector(-this.playerSpeed, 0));
-      // this.x += this.vel.x;
+      this.acc.add(createVector(-this.playerSpeed, 0));
+
       return;
     }
 
     if (xdir === 1) {
-      this.vel.add(createVector(this.playerSpeed, 0));
+      this.acc.add(createVector(this.playerSpeed, 0));
       // this.x += this.vel.x;
       return;
     }
-    if (ydir === -1) {
-      //  this.y += -this.playerSpeed;
-      return;
-    }
+    // if (ydir === -1) {
 
-    if (ydir === 1) {
-      //  this.y += this.playerSpeed;
+    //   this.y += -this.playerSpeed;
+    //   return;
+    // }
+
+    // if (ydir === 1) {
+    //   //  this.y += this.playerSpeed;
+    // }
+
+    if (ydir === -1 && !this.jumping) {
+      this.acc.add(createVector(0, -7));
+      this.falling = true;
     }
   }
 
   checkPlayerBottomCollision() {
-    if (this.y > height - BLOCKSIZE * 2) {
-      this.y = height - BLOCKSIZE * 2;
-      this.landed = true;
+    if (this.pos.y > height - BLOCKSIZE * 2) {
+      this.pos.y = height - BLOCKSIZE * 2;
+      this.outOfBounds = true;
       this.falling = false;
+      this.vel.y = 0;
+      this.acc.y = 0;
     }
   }
 
@@ -78,7 +92,7 @@ class Player {
   render() {
     fill(255);
     textSize(16);
-    text("XP:" + this.x + ",YP:" + this.y, 16, 16);
+    text("XP:" + this.pos.x + ",YP:" + this.pos.y, 16, 16);
     text("yvel:" + this.vel.y + ",xvel:" + this.vel.x, 16, 34);
     text(
       "Landed:" +
@@ -86,7 +100,9 @@ class Player {
         ",Collided:" +
         this.collided +
         ", Falling:" +
-        this.falling,
+        this.falling +
+        ", Jumping:" +
+        this.jumping,
       16,
       52
     );
@@ -97,18 +113,18 @@ class Player {
       fill(0, 255, 0);
     }
 
-    rect(this.x, this.y, BLOCKSIZE, BLOCKSIZE * 2);
+    rect(this.pos.x, this.pos.y, BLOCKSIZE, BLOCKSIZE * 2);
   }
 
   testBlockCollision(collider, boundary = "full") {
     if (
       Utils2d.checkBoundCollision(
-        this.x,
-        this.y,
+        this.pos.x,
+        this.pos.y,
         BLOCKSIZE,
         BLOCKSIZE * 2,
-        collider.x * BLOCKSIZE,
-        collider.y * BLOCKSIZE - 1,
+        collider.pos.x * BLOCKSIZE,
+        collider.pos.y * BLOCKSIZE - 1,
         BLOCKSIZE,
         BLOCKSIZE,
         boundary

@@ -4,6 +4,7 @@ class Controller {
     this.leftKeyDwn = false;
     this.rightKeyDwn = false;
     this.upKeyDwn = false;
+    this.jumpKey = false;
     this.downKeyDwn = false;
     this.spaceKeyDwn = false;
   }
@@ -21,16 +22,16 @@ class Controller {
       this.rightKeyDwn = false;
     }
 
-    if (keyIsDown(DOWN_ARROW)) {
-      this.downKeyDwn = true;
-    } else {
-      this.downKeyDwn = false;
-    }
+    // if (keyIsDown(DOWN_ARROW)) {
+    //   this.downKeyDwn = true;
+    // } else {
+    //   this.downKeyDwn = false;
+    // }
 
-    if (keyIsDown(UP_ARROW)) {
-      this.upKeyDwn = true;
-    } else {
-      this.upKeyDwn = false;
-    }
+    // if (keyIsDown(UP_ARROW)) {
+    //   this.upKeyDwn = true;
+    // } else {
+    //   this.upKeyDwn = false;
+    // }
   }
 }
