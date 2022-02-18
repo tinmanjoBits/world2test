@@ -9,7 +9,9 @@ class GameHandler {
   gameLoop() {
     this.gameKeys();
     this.player.update();
-    this.checkPlayerBlockCollisions();
+    if (this.player.falling) {
+      this.checkPlayerOnTopOfBlocks();
+    }
     this.renderWorld();
   }
 
@@ -28,29 +30,30 @@ class GameHandler {
     }
   }
 
-  checkPlayerBlockCollisions() {
+  checkPlayerOnTopOfBlocks() {
+    this.player.collided = false;
+    this.player.landed = false;
     for (let b of blocks) {
-      if (
-        Utils2d.checkBoundCollision(
-          this.player.x,
-          this.player.y,
-          BLOCKSIZE,
-          BLOCKSIZE,
-          b.x,
-          b.y,
-          BLOCKSIZE,
-          BLOCKSIZE
-        )
-      ) {
-        this.player.y = 0; // b.y - BLOCKSIZE * 3;
-        this.player.yvel = 0;
+      // only check blocks under the player
+      this.player.collided = player.testBlockCollision(b, "top");
+      if (this.player.collided) {
+        this.player.y = b.y * BLOCKSIZE - BLOCKSIZE * 2 - 1;
+        this.player.collided = false;
+        this.player.landed = true;
         break;
       }
+    }
+    if (this.player.collided) {
+      //  this.player.collided = false;
     }
   }
 
   renderWorld() {
     //    this.player.update();
+    for (let b of blocks) {
+      b.render();
+    }
+
     this.player.render();
   }
 }

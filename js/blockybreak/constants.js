@@ -4,7 +4,7 @@ const BLOCKSCALE = 1;
 const BLOCKSIZE = BLOCKSCALE * 32;
 const CHUNK_WIDTH = 4;
 const CHUNK_HEIGHT = 4;
-const GRAV = 0.8;
+const GRAV = 6.8;
 
 let WORLDCOORDSX = 0;
 let WORLDCOORDSY = 0;

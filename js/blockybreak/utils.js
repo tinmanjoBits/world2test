@@ -26,17 +26,36 @@ class Utils2d {
     rect2x,
     rect2y,
     rect2w,
-    rect2h
+    rect2h,
+    boundary
   ) {
-    if (
-      rect1x < rect2x + rect2w &&
-      rect1x + rect1w > rect2x &&
-      rect1y < rect2y + rect2h &&
-      rect1h + rect1y > rect2y
-    ) {
-      return true;
-    } else {
-      return false;
+    if (boundary === "full") {
+      if (
+        // rect1x < rect2x + rect2w &&
+        // rect1x + rect1w > rect2x &&
+        //rect1y < rect2y + rect2h &&
+        // rect1h + rect1y > rect2y
+
+        rect1x < rect2x + rect2w &&
+        rect1x + rect1w > rect2x &&
+        rect1y < rect2y + rect2h &&
+        rect1y + rect1h > rect2y
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (boundary === "top") {
+      if (
+        rect1x < rect2x + rect2w &&
+        rect1x + rect1w > rect2x &&
+        rect1y + rect1h > rect2y &&
+        rect1y + rect1h < rect2y + rect2h
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
   /*
